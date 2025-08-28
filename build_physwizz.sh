@@ -9,30 +9,30 @@ export PLATFORM_VERSION=11
 export ANDROID_MAJOR_VERSION=r
 export defconfig=physwizz_defconfig
 work_dir=$(pwd)
+out_dir=$work_dir/out
+
+mkdir -p "$out_dir"
 
 clean_build() {
-    make clean && make mrproper
-    make ARCH=arm64 $defconfig
-    make -j$(nproc)
-    mkdir -p $work_dir/out
-    cp $work_dir/arch/arm64/boot/Image $work_dir/out
-    echo "Done!"
+    make O="$out_dir" clean && make O="$out_dir" mrproper
+    make O="$out_dir" ARCH=arm64 $defconfig
+    make O="$out_dir" -j"$(nproc)"
+    echo "✅ Clean build finished!"
+    ls -lh "$out_dir/arch/arm64/boot/Image"
 }
 
 dirty_build() {
-    make ARCH=arm64 $defconfig
-    make -j$(nproc)
-    mkdir -p $work_dir/out
-    cp $work_dir/arch/arm64/boot/Image $work_dir/out
-    echo "Done !"
+    make O="$out_dir" ARCH=arm64 $defconfig
+    make O="$out_dir" -j"$(nproc)"
+    echo "✅ Dirty build finished!"
+    ls -lh "$out_dir/arch/arm64/boot/Image"
 }
 
 dirty_slow() {
-    make ARCH=arm64 $defconfig
-    make
-    mkdir -p $work_dir/out
-    cp $work_dir/arch/arm64/boot/Image $work_dir/out
-    echo "Check for errors"
+    make O="$out_dir" ARCH=arm64 $defconfig
+    make O="$out_dir"
+    echo "⚠️ Dirty slow build finished (check errors)!"
+    ls -lh "$out_dir/arch/arm64/boot/Image"
 }
 
 # parametre kontrol
@@ -47,12 +47,9 @@ else
     read -r value
 fi
 
-if [ "$value" == "1" ]; then
-    clean_build
-elif [ "$value" == "2" ]; then
-    dirty_build
-elif [ "$value" == "3" ]; then
-    dirty_slow
-else
-    echo "Invalid input"
-fi
+case "$value" in
+    "1") clean_build ;;
+    "2") dirty_build ;;
+    "3") dirty_slow ;;
+    *) echo "Invalid input" ;;
+esac
