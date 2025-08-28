@@ -46,11 +46,11 @@ echo -e "Choose : (1, 2, 3)
 Your choice : "
 
 read -r value
-if [ "$value" == 1 ]; then
+if [ "$value" == "1" ]; then
     clean_build
-elif [ "$value" == 2 ]; then
+elif [ "$value" == "2" ]; then
     dirty_build     
-elif [ "$value" == 3 ]; then
+elif [ "$value" == "3" ]; then
     dirty_slow    
 else
     echo "Invalid input"
