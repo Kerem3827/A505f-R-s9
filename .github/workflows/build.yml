@@ -20,4 +20,4 @@ jobs:
 
       - name: build
         run: |
-             bash build.sh 1
+             bash build_physwizz.sh 1
