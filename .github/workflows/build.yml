@@ -1,0 +1,23 @@
+name: build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt install make libssl-dev curl bc pkg-config m4 libtool automake autoconf libelf-dev bzip2 p7zip-full jq python3 python-is-python3 -y
+
+      - name: build
+        run: |
+             bash build.sh 1
